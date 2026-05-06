@@ -7,6 +7,7 @@ export default function Quotation() {
   const navigate = useNavigate();
   const [showForm, setShowForm] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [toastMsg, setToastMsg] = useState('');
 
   useEffect(() => {
@@ -26,8 +27,12 @@ export default function Quotation() {
       return;
     }
 
-    clearQuote();
-    setSubmitted(true);
+    setIsSubmitting(true);
+    setTimeout(() => {
+      setIsSubmitting(false);
+      clearQuote();
+      setSubmitted(true);
+    }, 1500);
   };
 
   return (
@@ -122,7 +127,17 @@ export default function Quotation() {
               </div>
               <div className="form-actions">
                 <button type="button" className="btn-outline" onClick={() => setShowForm(false)}>Cancel</button>
-                <button type="submit" className="btn-primary">Submit Quotation</button>
+                <button type="submit" className="btn-primary" disabled={isSubmitting} style={{ opacity: isSubmitting ? 0.7 : 1, cursor: isSubmitting ? 'not-allowed' : 'pointer' }}>
+                  {isSubmitting ? (
+                    <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <svg className="spinner" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ animation: 'spin 1s linear infinite' }}>
+                        <circle cx="12" cy="12" r="10" strokeOpacity="0.25" />
+                        <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+                      </svg>
+                      Processing...
+                    </span>
+                  ) : 'Submit Quotation'}
+                </button>
               </div>
             </form>
           </div>
@@ -135,7 +150,7 @@ export default function Quotation() {
                 <polyline points="20 6 9 17 4 12" />
               </svg>
             </div>
-            <h3 style={{ fontFamily: "'Archivo Black', sans-serif", fontSize: '1.75rem', color: '#fff', marginBottom: '0.75rem' }}>Quotation Submitted!</h3>
+            <h3 style={{ fontFamily: "'Archivo Black', sans-serif", fontSize: '1.75rem', marginBottom: '0.75rem' }}>Quotation Submitted!</h3>
             <p style={{ color: 'var(--steel)', marginBottom: '2rem' }}>Our team will review your request and get back to you shortly with pricing.</p>
             <button className="btn-outline" onClick={() => { setSubmitted(false); navigate('/products'); }}>Continue Browsing</button>
           </div>

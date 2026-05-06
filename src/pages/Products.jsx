@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
 import { PRODUCTS, CAT_LABELS } from '../data/products';
 
 export default function Products() {
   const location = useLocation();
-  const [currentFilter, setCurrentFilter] = useState('all');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const currentFilter = searchParams.get('category') || 'all';
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
@@ -14,12 +15,18 @@ export default function Products() {
 
   useEffect(() => {
     if (location.state?.category) {
-      setCurrentFilter(location.state.category);
-    } else {
-      setCurrentFilter('all');
+      setSearchParams({ category: location.state.category });
     }
     setSearchQuery('');
-  }, [location.state]);
+  }, [location.state, setSearchParams]);
+
+  const handleFilterChange = (cat) => {
+    if (cat === 'all') {
+      setSearchParams({});
+    } else {
+      setSearchParams({ category: cat });
+    }
+  };
 
   const filteredProducts = PRODUCTS.filter(p => {
     const catMatch = currentFilter === 'all' || p.category === currentFilter;
@@ -62,9 +69,9 @@ export default function Products() {
 
         {/* Filters */}
         <div className="filter-bar">
-          <button className={`filter-btn ${currentFilter === 'all' ? 'active' : ''}`} onClick={() => setCurrentFilter('all')}>All Products</button>
+          <button className={`filter-btn ${currentFilter === 'all' ? 'active' : ''}`} onClick={() => handleFilterChange('all')}>All Products</button>
           {Object.entries(CAT_LABELS).map(([key, label]) => (
-            <button key={key} className={`filter-btn ${currentFilter === key ? 'active' : ''}`} onClick={() => setCurrentFilter(key)}>
+            <button key={key} className={`filter-btn ${currentFilter === key ? 'active' : ''}`} onClick={() => handleFilterChange(key)}>
               {label}
             </button>
           ))}

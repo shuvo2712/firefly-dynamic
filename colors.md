@@ -1,7 +1,5 @@
 # Firefly Brand Colors
 
-| Name | Hex |
-| :--- | :--- |
 | Lime Green (Fire) | #9BCF53 |
 | Forest Green (Fly) | #2D5A27 |
 | Yellow (Primary) | #FDB813 |

@@ -9,6 +9,18 @@ export default function Home() {
 
   useEffect(() => {
     document.title = 'Firefly — Premium Electrical Wholesale';
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    return () => observer.disconnect();
   }, []);
 
   const handleCategoryClick = (cat) => {
@@ -52,7 +64,7 @@ export default function Home() {
       </div>
 
       {/* Stats */}
-      <div className="stats">
+      <div className="stats reveal">
         <div className="stats-inner">
           <div className="stat"><span className="stat-value">500+</span><span className="stat-label">Products</span></div>
           <div className="stat"><span className="stat-value">2000+</span><span className="stat-label">Projects Served</span></div>
@@ -62,7 +74,7 @@ export default function Home() {
       </div>
 
       {/* Categories */}
-      <section className="categories">
+      <section className="categories reveal">
         <div className="categories-inner">
           <div className="section-heading">
             <span className="section-eyebrow">Our Expertise</span>
@@ -112,7 +124,7 @@ export default function Home() {
       </section>
 
       {/* Featured Products */}
-      <section className="featured">
+      <section className="featured reveal">
         <div className="featured-inner">
           <div className="section-heading">
             <span className="section-eyebrow">Handpicked</span>
@@ -127,7 +139,7 @@ export default function Home() {
       </section>
 
       {/* CTA */}
-      <section className="cta-section">
+      <section className="cta-section reveal">
         <div className="cta-glow"></div>
         <span className="section-eyebrow">Ready to Transform Your Project?</span>
         <h2>Let's Build<br />Something Brilliant</h2>

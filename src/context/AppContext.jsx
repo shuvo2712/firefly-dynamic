@@ -4,14 +4,21 @@ export const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
-  const [quotation, setQuotation] = useState([]);
+  const [quotation, setQuotation] = useState(() => {
+    const saved = localStorage.getItem('firefly_quote');
+    return saved ? JSON.parse(saved) : [];
+  });
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    document.body.classList.toggle('light-theme', theme === 'light');
+    document.documentElement.classList.toggle('light-theme', theme === 'light');
     document.documentElement.style.colorScheme = theme;
     localStorage.setItem('theme', theme);
   }, [theme]);
+
+  useEffect(() => {
+    localStorage.setItem('firefly_quote', JSON.stringify(quotation));
+  }, [quotation]);
 
   const toggleTheme = () => setTheme(prev => prev === 'light' ? 'dark' : 'light');
 
