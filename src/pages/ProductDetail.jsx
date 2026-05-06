@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { AppContext } from '../context/AppContext';
 import { PRODUCTS, CAT_LABELS } from '../data/products';
@@ -12,8 +12,23 @@ export default function ProductDetail() {
 
   const product = PRODUCTS.find(p => p.id === parseInt(id));
 
+  useEffect(() => {
+    if (product) {
+      document.title = `${product.name} | Firefly`;
+    } else {
+      document.title = 'Product Not Found | Firefly';
+    }
+  }, [product]);
+
   if (!product) {
-    return <div className="page active"><div className="page-inner">Product not found.</div></div>;
+    return (
+      <div className="page active">
+        <div className="page-inner" style={{ textAlign: 'center', paddingTop: '4rem' }}>
+          <p style={{ color: 'var(--steel)', marginBottom: '1.5rem' }}>Product not found.</p>
+          <button className="btn-outline" onClick={() => navigate('/products')}>Back to Products</button>
+        </div>
+      </div>
+    );
   }
 
   const specs = [
@@ -51,7 +66,7 @@ export default function ProductDetail() {
             <div className="detail-price">{product.price_range}</div>
             <p className="detail-desc">{product.description}</p>
 
-            <div className="specs-box" style={{ display: specs.length ? 'block' : 'none' }}>
+            <div className="specs-box" style={{ display: (specs.length || product.specifications) ? 'block' : 'none' }}>
               <div className="specs-title">Specifications</div>
               <div className="specs-grid">
                 {specs.map((s, i) => (
@@ -63,9 +78,8 @@ export default function ProductDetail() {
                     </div>
                   </div>
                 ))}
-                {/* Always show raw specifications if they exist */}
                 {product.specifications && (
-                  <div className="spec-item" style={{ gridColumn: '1 / -1', marginTop: '1rem' }}>
+                  <div className="spec-item" style={{ gridColumn: '1 / -1', marginTop: specs.length ? '1rem' : 0 }}>
                     <div className="spec-icon">📄</div>
                     <div>
                       <div className="spec-label">Details</div>
@@ -77,20 +91,20 @@ export default function ProductDetail() {
             </div>
 
             <div className="qty-row">
-              <label>Qty:</label>
-              <input 
-                className="form-input qty-input" 
-                type="number" 
-                min="1" 
-                value={qty} 
-                onChange={(e) => setQty(Math.max(1, parseInt(e.target.value) || 1))} 
+              <label htmlFor="detail-qty">Qty:</label>
+              <input
+                id="detail-qty"
+                className="form-input qty-input"
+                type="number"
+                min="1"
+                value={qty}
+                onChange={(e) => setQty(Math.max(1, parseInt(e.target.value) || 1))}
               />
             </div>
             <div className="detail-btns">
               <button className="btn-primary" onClick={handleAddQuote}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <circle cx="9" cy="21" r="1" />
-                  <circle cx="20" cy="21" r="1" />
+                  <circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" />
                   <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
                 </svg>
                 Add to Quotation

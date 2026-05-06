@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
 import { PRODUCTS } from '../data/products';
@@ -6,6 +6,10 @@ import { PRODUCTS } from '../data/products';
 export default function Home() {
   const navigate = useNavigate();
   const featured = PRODUCTS.filter(p => p.featured);
+
+  useEffect(() => {
+    document.title = 'Firefly — Premium Electrical Wholesale';
+  }, []);
 
   const handleCategoryClick = (cat) => {
     navigate('/products', { state: { category: cat } });
@@ -17,7 +21,7 @@ export default function Home() {
       {/* Hero */}
       <div className="hero">
         <div className="hero-bg">
-          <img src="/assests/hero-bg.png" alt="Premium Switchboard" />
+          <img src="/assests/hero-bg.png" alt="Premium Switchboard" fetchpriority="high" />
           <div></div>
         </div>
         <div className="hero-grid-lines">
@@ -69,7 +73,7 @@ export default function Home() {
           <div className="cat-grid">
             <div className="prod-card" onClick={() => handleCategoryClick('dual_switch')}>
               <div className="prod-img">
-                <img src="/assests/products/firefly 2b.jpeg" alt="dual switch" />
+                <img src="/assests/products/firefly 2b.jpeg" alt="Dual switch category" />
                 <div className="prod-img-overlay"></div>
                 <div className="prod-info">
                   <span className="prod-cat">Category 01</span>
@@ -81,7 +85,7 @@ export default function Home() {
             </div>
             <div className="prod-card" onClick={() => handleCategoryClick('fan_switch')}>
               <div className="prod-img">
-                <img src="/assests/products/firefly fb.jpeg" alt="fan switch" />
+                <img src="/assests/products/firefly fb.jpeg" alt="Fan switch category" />
                 <div className="prod-img-overlay"></div>
                 <div className="prod-info">
                   <span className="prod-cat">Category 02</span>
@@ -93,7 +97,7 @@ export default function Home() {
             </div>
             <div className="prod-card" onClick={() => handleCategoryClick('sockets')}>
               <div className="prod-img">
-                <img src="/assests/products/firefly sb.jpeg" alt="sockets" />
+                <img src="/assests/products/firefly sb.jpeg" alt="Sockets category" />
                 <div className="prod-img-overlay"></div>
                 <div className="prod-info">
                   <span className="prod-cat">Category 03</span>

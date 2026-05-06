@@ -9,6 +9,10 @@ export default function SampleRequest() {
   const [toastMsg, setToastMsg] = useState('');
 
   useEffect(() => {
+    document.title = 'Request a Sample | Firefly';
+  }, []);
+
+  useEffect(() => {
     if (location.state?.product) {
       setSelectedProduct(location.state.product);
     }
@@ -16,9 +20,9 @@ export default function SampleRequest() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const product = e.target.product.value;
-    const name = e.target.name.value;
-    const email = e.target.email.value;
+    const product = e.target['s-product'].value;
+    const name = e.target['s-name'].value;
+    const email = e.target['s-email'].value;
 
     if (!product || !name || !email) {
       setToastMsg('Please fill in all required fields.');
@@ -42,8 +46,15 @@ export default function SampleRequest() {
           <div className="form-card">
             <form onSubmit={handleSubmit}>
               <div className="form-group" style={{ marginBottom: '1rem' }}>
-                <label>Product *</label>
-                <select name="product" className="form-select" value={selectedProduct} onChange={e => setSelectedProduct(e.target.value)} required>
+                <label htmlFor="s-product">Product *</label>
+                <select
+                  id="s-product"
+                  name="s-product"
+                  className="form-select"
+                  value={selectedProduct}
+                  onChange={e => setSelectedProduct(e.target.value)}
+                  required
+                >
                   <option value="">Select a product...</option>
                   {PRODUCTS.map(p => (
                     <option key={p.id} value={p.name}>{p.name}</option>
@@ -51,12 +62,30 @@ export default function SampleRequest() {
                 </select>
               </div>
               <div className="form-grid">
-                <div className="form-group"><label>Full Name *</label><input name="name" className="form-input" placeholder="Your Name" required /></div>
-                <div className="form-group"><label>Email *</label><input name="email" className="form-input" type="email" placeholder="Your Email" required /></div>
-                <div className="form-group"><label>Phone</label><input name="phone" className="form-input" placeholder="0123456789" /></div>
-                <div className="form-group"><label>Company</label><input name="company" className="form-input" placeholder="Your Company" /></div>
-                <div className="form-group form-full"><label>Shipping Address</label><textarea name="address" className="form-textarea" placeholder="Full delivery address"></textarea></div>
-                <div className="form-group form-full"><label>Message</label><textarea name="message" className="form-textarea" placeholder="Any specific requirements or project context..."></textarea></div>
+                <div className="form-group">
+                  <label htmlFor="s-name">Full Name *</label>
+                  <input id="s-name" name="s-name" className="form-input" placeholder="Your Name" required />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="s-email">Email *</label>
+                  <input id="s-email" name="s-email" className="form-input" type="email" placeholder="Your Email" required />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="s-phone">Phone</label>
+                  <input id="s-phone" name="s-phone" className="form-input" placeholder="0123456789" />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="s-company">Company</label>
+                  <input id="s-company" name="s-company" className="form-input" placeholder="Your Company" />
+                </div>
+                <div className="form-group form-full">
+                  <label htmlFor="s-address">Shipping Address</label>
+                  <textarea id="s-address" name="s-address" className="form-textarea" placeholder="Full delivery address"></textarea>
+                </div>
+                <div className="form-group form-full">
+                  <label htmlFor="s-message">Message</label>
+                  <textarea id="s-message" name="s-message" className="form-textarea" placeholder="Any specific requirements or project context..."></textarea>
+                </div>
               </div>
               <button type="submit" className="btn-primary" style={{ width: '100%', justifyContent: 'center', padding: '1rem', marginTop: '0.5rem' }}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ display: 'inline', marginRight: '6px' }}>

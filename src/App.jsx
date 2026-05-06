@@ -12,6 +12,7 @@ import Products from './pages/Products';
 import ProductDetail from './pages/ProductDetail';
 import Quotation from './pages/Quotation';
 import SampleRequest from './pages/SampleRequest';
+import NotFound from './pages/NotFound';
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -33,6 +34,7 @@ function AppInner() {
           <Route path="/products/:id" element={<ProductDetail />} />
           <Route path="/quotation" element={<Quotation />} />
           <Route path="/sample" element={<SampleRequest />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
       <Footer />

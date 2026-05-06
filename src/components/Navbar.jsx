@@ -1,10 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import { AppContext } from '../context/AppContext';
 
 export default function Navbar() {
   const { theme, toggleTheme, quotation, isMobileMenuOpen, toggleMobileMenu, closeMobileMenu } = useContext(AppContext);
-  const navigate = useNavigate();
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -16,21 +15,24 @@ export default function Navbar() {
 
   const totalItems = quotation.reduce((s, i) => s + i.qty, 0);
 
-
   return (
     <>
       <nav id="navbar" className={scrolled ? 'scrolled' : ''}>
-        <NavLink to="/" className="nav-logo" onClick={closeMobileMenu}>
-          <img src={theme === 'light' ? '/assests/logo/logo-light.png' : '/assests/logo/logo-dark.png'} alt="FIREFLY" className="nav-logo-img" />
+        <NavLink to="/" className="nav-logo" onClick={closeMobileMenu} end>
+          <img
+            src={theme === 'light' ? '/assests/logo/logo-light.png' : '/assests/logo/logo-dark.png'}
+            alt="FIREFLY"
+            className="nav-logo-img"
+          />
         </NavLink>
         <div className="nav-links">
-          <NavLink to="/" className={({ isActive }) => isActive ? "active" : ""}>Home</NavLink>
-          <NavLink to="/products" className={({ isActive }) => isActive ? "active" : ""}>Products</NavLink>
-          <NavLink to="/quotation" className={({ isActive }) => isActive ? "active" : ""}>Quotation</NavLink>
-          <NavLink to="/sample" className={({ isActive }) => isActive ? "active" : ""}>Request Sample</NavLink>
+          <NavLink to="/" end className={({ isActive }) => isActive ? 'active' : ''}>Home</NavLink>
+          <NavLink to="/products" className={({ isActive }) => isActive ? 'active' : ''}>Products</NavLink>
+          <NavLink to="/quotation" className={({ isActive }) => isActive ? 'active' : ''}>Quotation</NavLink>
+          <NavLink to="/sample" className={({ isActive }) => isActive ? 'active' : ''}>Request Sample</NavLink>
         </div>
         <div className="theme-toggle-wrapper">
-          <button className="menu-toggle" onClick={toggleMobileMenu} title="Open Menu">
+          <button className="menu-toggle" onClick={toggleMobileMenu} aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               {isMobileMenuOpen ? (
                 <>
@@ -46,7 +48,11 @@ export default function Navbar() {
               )}
             </svg>
           </button>
-          <button className="theme-toggle" onClick={toggleTheme} title="Toggle Theme">
+          <button
+            className="theme-toggle"
+            onClick={toggleTheme}
+            aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+          >
             <svg className="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="12" r="5" />
               <line x1="12" y1="1" x2="12" y2="3" />
@@ -62,24 +68,24 @@ export default function Navbar() {
               <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
             </svg>
           </button>
-          <div className="nav-cart" onClick={() => navigate('/quotation')}>
+          <Link to="/quotation" className="nav-cart" aria-label={`View quotation (${totalItems} items)`}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="9" cy="21" r="1" />
               <circle cx="20" cy="21" r="1" />
               <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
             </svg>
             <div className="cart-badge" style={{ display: totalItems > 0 ? 'flex' : 'none' }}>{totalItems}</div>
-          </div>
+          </Link>
         </div>
       </nav>
 
       {/* MOBILE MENU DROPDOWN */}
       <div className={`mobile-menu ${isMobileMenuOpen ? 'active' : ''}`}>
         <div className="mobile-links">
-          <NavLink to="/" className={({ isActive }) => isActive ? "mobile-link active" : "mobile-link"} onClick={closeMobileMenu}>Home</NavLink>
-          <NavLink to="/products" className={({ isActive }) => isActive ? "mobile-link active" : "mobile-link"} onClick={closeMobileMenu}>Products</NavLink>
-          <NavLink to="/quotation" className={({ isActive }) => isActive ? "mobile-link active" : "mobile-link"} onClick={closeMobileMenu}>Quotation</NavLink>
-          <NavLink to="/sample" className={({ isActive }) => isActive ? "mobile-link active" : "mobile-link"} onClick={closeMobileMenu}>Request Sample</NavLink>
+          <NavLink to="/" end className={({ isActive }) => isActive ? 'mobile-link active' : 'mobile-link'} onClick={closeMobileMenu}>Home</NavLink>
+          <NavLink to="/products" className={({ isActive }) => isActive ? 'mobile-link active' : 'mobile-link'} onClick={closeMobileMenu}>Products</NavLink>
+          <NavLink to="/quotation" className={({ isActive }) => isActive ? 'mobile-link active' : 'mobile-link'} onClick={closeMobileMenu}>Quotation</NavLink>
+          <NavLink to="/sample" className={({ isActive }) => isActive ? 'mobile-link active' : 'mobile-link'} onClick={closeMobileMenu}>Request Sample</NavLink>
         </div>
       </div>
     </>

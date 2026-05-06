@@ -125,11 +125,19 @@ nav.scrolled {
 
 .nav-cart {
   position: relative;
+  display: flex;
+  align-items: center;
   cursor: pointer;
+  color: var(--steel);
+  transition: color 0.2s;
+}
+
+.nav-cart:hover {
+  color: var(--primary);
 }
 
 .nav-cart svg {
-  color: var(--steel);
+  color: inherit;
 }
 
 .cart-badge {
@@ -821,6 +829,58 @@ footer {
   margin: 0 auto;
 }
 
+/* ── SEARCH BAR ──────────────────────────────────── */
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.625rem 1rem;
+  margin-bottom: 1.25rem;
+  transition: border-color 0.2s;
+}
+
+.search-bar:focus-within {
+  border-color: rgba(253, 184, 19, 0.35);
+}
+
+.search-bar svg {
+  color: var(--steel);
+  flex-shrink: 0;
+}
+
+.search-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--white);
+  font-family: inherit;
+  font-size: 0.9rem;
+}
+
+.search-input::placeholder {
+  color: rgba(161, 161, 170, 0.45);
+}
+
+.search-clear {
+  background: none;
+  border: none;
+  color: var(--steel);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 2px;
+  border-radius: 2px;
+  transition: color 0.2s;
+}
+
+.search-clear:hover {
+  color: var(--white);
+}
+
 .filter-bar {
   display: flex;
   flex-wrap: wrap;
@@ -1097,11 +1157,11 @@ footer {
 }
 
 .detail-cat {
-  color: rgba(253, 184, 19, 0.7);
   font-size: 0.6rem;
   letter-spacing: 0.3em;
   text-transform: uppercase;
   margin-bottom: 0.5rem;
+  animation: greenGlowPulse 4s infinite ease-in-out;
 }
 
 .detail-name {
@@ -1133,7 +1193,7 @@ footer {
 }
 
 .specs-title {
-  color: #fff;
+  color: var(--white);
   font-size: 0.6rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
