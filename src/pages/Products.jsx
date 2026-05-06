@@ -10,6 +10,8 @@ export default function Products() {
   useEffect(() => {
     if (location.state?.category) {
       setCurrentFilter(location.state.category);
+    } else {
+      setCurrentFilter('all');
     }
   }, [location.state]);
 

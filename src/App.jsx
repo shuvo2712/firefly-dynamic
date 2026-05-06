@@ -21,12 +21,12 @@ const ScrollToTop = () => {
   return null;
 };
 
-function App() {
+function AppInner() {
   return (
-    <AppProvider>
-      <Router>
-        <ScrollToTop />
-        <Navbar />
+    <>
+      <ScrollToTop />
+      <Navbar />
+      <main>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/products" element={<Products />} />
@@ -34,9 +34,19 @@ function App() {
           <Route path="/quotation" element={<Quotation />} />
           <Route path="/sample" element={<SampleRequest />} />
         </Routes>
-        <Footer />
-      </Router>
-    </AppProvider>
+      </main>
+      <Footer />
+    </>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <AppProvider>
+        <AppInner />
+      </AppProvider>
+    </Router>
   );
 }
 

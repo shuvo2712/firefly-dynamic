@@ -16,10 +16,6 @@ export default function Navbar() {
 
   const totalItems = quotation.reduce((s, i) => s + i.qty, 0);
 
-  const handleMobileNav = (path) => {
-    navigate(path);
-    closeMobileMenu();
-  };
 
   return (
     <>
