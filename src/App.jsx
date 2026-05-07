@@ -13,6 +13,8 @@ import ProductDetail from './pages/ProductDetail';
 import Quotation from './pages/Quotation';
 import SampleRequest from './pages/SampleRequest';
 import NotFound from './pages/NotFound';
+import AdminLogin from './pages/AdminLogin';
+import AdminDashboard from './pages/AdminDashboard';
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -23,10 +25,13 @@ const ScrollToTop = () => {
 };
 
 function AppInner() {
+  const { pathname } = useLocation();
+  const isAdmin = pathname.startsWith('/admin');
+
   return (
     <>
       <ScrollToTop />
-      <Navbar />
+      {!isAdmin && <Navbar />}
       <main>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -34,10 +39,12 @@ function AppInner() {
           <Route path="/products/:id" element={<ProductDetail />} />
           <Route path="/quotation" element={<Quotation />} />
           <Route path="/sample" element={<SampleRequest />} />
+          <Route path="/admin" element={<AdminLogin />} />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
-      <Footer />
+      {!isAdmin && <Footer />}
     </>
   );
 }
