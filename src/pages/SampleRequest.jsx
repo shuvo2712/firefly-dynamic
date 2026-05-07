@@ -36,21 +36,47 @@ export default function SampleRequest() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const product = e.target['s-product'].value;
-    const name = e.target['s-name'].value;
-    const email = e.target['s-email'].value;
+    
+    // Get data from the form
+    const formData = {
+      product_name: selectedProduct,
+      full_name: e.target['s-name'].value,
+      email: e.target['s-email'].value,
+      phone: e.target['s-phone'].value,
+      company: e.target['s-company'].value,
+      shipping_address: e.target['s-address'].value,
+      message: e.target['s-message'].value
+    };
 
-    if (!product || !name || !email) {
+    if (!formData.product_name || !formData.full_name || !formData.email) {
       setToastMsg('Please fill in all required fields.');
       setTimeout(() => setToastMsg(''), 3000);
       return;
     }
     
     setIsSubmitting(true);
-    setTimeout(() => {
+
+    // --- LIVE POST TO PHP ---
+    const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost/firefly-api';
+    fetch(`${apiBase}/submit_sample.php`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData)
+    })
+    .then(res => res.json())
+    .then(data => {
       setIsSubmitting(false);
-      setSubmitted(true);
-    }, 1500);
+      if (data.status === 'success') {
+        setSubmitted(true);
+      } else {
+        setToastMsg('Error: ' + data.message);
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      setIsSubmitting(false);
+      setToastMsg('Server connection failed.');
+    });
   };
 
   return (

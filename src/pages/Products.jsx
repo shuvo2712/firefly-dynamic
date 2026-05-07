@@ -1,16 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useSearchParams } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
-import { PRODUCTS, CAT_LABELS } from '../data/products';
+import { CAT_LABELS } from '../data/products';
 
 export default function Products() {
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
   const currentFilter = searchParams.get('category') || 'all';
   const [searchQuery, setSearchQuery] = useState('');
+  
+  const [products, setProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     document.title = 'Products | Firefly';
+    
+    const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost/firefly-api';
+    fetch(`${apiBase}/get_products.php`)
+      .then(res => res.json())
+      .then(data => {
+        setProducts(data);
+        setIsLoading(false);
+      })
+      .catch(err => {
+        console.error("Fetch error:", err);
+        setIsLoading(false);
+      });
   }, []);
 
   useEffect(() => {
@@ -28,7 +43,7 @@ export default function Products() {
     }
   };
 
-  const filteredProducts = PRODUCTS.filter(p => {
+  const filteredProducts = products.filter(p => {
     const catMatch = currentFilter === 'all' || p.category === currentFilter;
     const searchMatch = !searchQuery || p.name.toLowerCase().includes(searchQuery.toLowerCase());
     return catMatch && searchMatch;
@@ -79,7 +94,16 @@ export default function Products() {
 
         {/* Grid */}
         <div className="prod-grid">
-          {filteredProducts.length ? (
+          {isLoading ? (
+            <div style={{ gridColumn: '1/-1', textAlign: 'center', padding: '4rem' }}>
+              <div className="spinner" style={{ margin: '0 auto 1rem', animation: 'spin 1s linear infinite' }}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" strokeWidth="3">
+                  <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+                </svg>
+              </div>
+              <p style={{ color: 'var(--steel)' }}>Loading live collection...</p>
+            </div>
+          ) : filteredProducts.length ? (
             filteredProducts.map(p => <ProductCard key={p.id} product={p} />)
           ) : (
             <div style={{ gridColumn: '1/-1', textAlign: 'center', padding: '4rem', color: 'var(--steel)' }}>

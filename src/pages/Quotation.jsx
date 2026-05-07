@@ -18,21 +18,49 @@ export default function Quotation() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const name = e.target['q-name'].value;
-    const email = e.target['q-email'].value;
+    
+    const formData = {
+      customer_name: e.target['q-name'].value,
+      customer_email: e.target['q-email'].value,
+      items: quotation // This is the array of cart items from context
+    };
 
-    if (!name || !email) {
+    if (!formData.customer_name || !formData.customer_email) {
       setToastMsg('Please fill in name and email.');
       setTimeout(() => setToastMsg(''), 3000);
       return;
     }
 
+    if (quotation.length === 0) {
+      setToastMsg('Your quotation is empty.');
+      setTimeout(() => setToastMsg(''), 3000);
+      return;
+    }
+
     setIsSubmitting(true);
-    setTimeout(() => {
+
+    // --- LIVE POST TO PHP ---
+    const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost/firefly-api';
+    fetch(`${apiBase}/submit_quotation.php`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData)
+    })
+    .then(res => res.json())
+    .then(data => {
       setIsSubmitting(false);
-      clearQuote();
-      setSubmitted(true);
-    }, 1500);
+      if (data.status === 'success') {
+        clearQuote(); // Clear cart after successful save
+        setSubmitted(true);
+      } else {
+        setToastMsg('Error: ' + data.message);
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      setIsSubmitting(false);
+      setToastMsg('Server connection failed.');
+    });
   };
 
   return (

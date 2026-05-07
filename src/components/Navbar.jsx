@@ -20,7 +20,7 @@ export default function Navbar() {
       <nav id="navbar" className={scrolled ? 'scrolled' : ''}>
         <NavLink to="/" className="nav-logo" onClick={closeMobileMenu} end>
           <img
-            src={theme === 'light' ? '/assests/logo/logo-light.png' : '/assests/logo/logo-dark.png'}
+            src={theme === 'light' ? '/images/logo/logo-light.png' : '/images/logo/logo-dark.png'}
             alt="FIREFLY"
             className="nav-logo-img"
           />

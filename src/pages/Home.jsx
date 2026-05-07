@@ -1,15 +1,29 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
-import { PRODUCTS } from '../data/products';
 
 export default function Home() {
   const navigate = useNavigate();
-  const featured = PRODUCTS.filter(p => p.featured);
+  const [products, setProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     document.title = 'Firefly — Premium Electrical Wholesale';
 
+    // 1. Fetch featured products
+    const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost/firefly-api';
+    fetch(`${apiBase}/get_products.php`)
+      .then(res => res.json())
+      .then(data => {
+        setProducts(data.filter(p => p.featured == 1));
+        setIsLoading(false);
+      })
+      .catch(err => {
+        console.error("Home fetch error:", err);
+        setIsLoading(false);
+      });
+
+    // 2. Scroll Reveal Observer
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -23,6 +37,8 @@ export default function Home() {
     return () => observer.disconnect();
   }, []);
 
+  const featured = products;
+
   const handleCategoryClick = (cat) => {
     navigate('/products', { state: { category: cat } });
     window.scrollTo(0, 0);
@@ -33,7 +49,7 @@ export default function Home() {
       {/* Hero */}
       <div className="hero">
         <div className="hero-bg">
-          <img src="/assests/hero-bg.png" alt="Premium Switchboard" fetchpriority="high" />
+          <img src="/images/hero-bg.png" alt="Premium Switchboard" fetchpriority="high" />
           <div></div>
         </div>
         <div className="hero-grid-lines">
@@ -85,7 +101,7 @@ export default function Home() {
           <div className="cat-grid">
             <div className="prod-card" onClick={() => handleCategoryClick('dual_switch')}>
               <div className="prod-img">
-                <img src="/assests/products/firefly 2b.jpeg" alt="Dual switch category" />
+                <img src="/images/products/firefly 2b.jpeg" alt="Dual switch category" />
                 <div className="prod-img-overlay"></div>
                 <div className="prod-info">
                   <span className="prod-cat">Category 01</span>
@@ -97,7 +113,7 @@ export default function Home() {
             </div>
             <div className="prod-card" onClick={() => handleCategoryClick('fan_switch')}>
               <div className="prod-img">
-                <img src="/assests/products/firefly fb.jpeg" alt="Fan switch category" />
+                <img src="/images/products/firefly fb.jpeg" alt="Fan switch category" />
                 <div className="prod-img-overlay"></div>
                 <div className="prod-info">
                   <span className="prod-cat">Category 02</span>
@@ -109,7 +125,7 @@ export default function Home() {
             </div>
             <div className="prod-card" onClick={() => handleCategoryClick('sockets')}>
               <div className="prod-img">
-                <img src="/assests/products/firefly sb.jpeg" alt="Sockets category" />
+                <img src="/images/products/firefly sb.jpeg" alt="Sockets category" />
                 <div className="prod-img-overlay"></div>
                 <div className="prod-info">
                   <span className="prod-cat">Category 03</span>

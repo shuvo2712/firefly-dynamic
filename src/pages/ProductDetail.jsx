@@ -7,18 +7,47 @@ export default function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { addToQuote } = useContext(AppContext);
+  
+  const [product, setProduct] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [qty, setQty] = useState(1);
   const [toastMsg, setToastMsg] = useState('');
 
-  const product = PRODUCTS.find(p => p.id === parseInt(id));
-
   useEffect(() => {
-    if (product) {
-      document.title = `${product.name} | Firefly`;
-    } else {
-      document.title = 'Product Not Found | Firefly';
-    }
-  }, [product]);
+    setIsLoading(true);
+    const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost/firefly-api';
+    fetch(`${apiBase}/get_product_by_id.php?id=${id}`)
+      .then(res => {
+        if (!res.ok) throw new Error('Not found');
+        return res.json();
+      })
+      .then(data => {
+        // Parse specs if it comes as a JSON string from some PHP versions
+        if (typeof data.specs === 'string') {
+          try { data.specs = JSON.parse(data.specs); } catch(e) {}
+        }
+        setProduct(data);
+        document.title = `${data.name} | Firefly`;
+        setIsLoading(false);
+      })
+      .catch(err => {
+        console.error("Fetch error:", err);
+        document.title = 'Product Not Found | Firefly';
+        setIsLoading(false);
+      });
+  }, [id]);
+
+  if (isLoading) {
+    return (
+      <div className="page active" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
+        <div className="spinner" style={{ animation: 'spin 1s linear infinite' }}>
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" strokeWidth="3">
+            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+          </svg>
+        </div>
+      </div>
+    );
+  }
 
   if (!product) {
     return (
@@ -34,6 +63,7 @@ export default function ProductDetail() {
   const specs = [
     { icon: '⚡', label: 'Wattage', value: product.wattage },
     { icon: '◈', label: 'Material', value: product.material },
+    { icon: '💰', label: 'Price Range', value: product.price_range },
   ].filter(s => s.value && s.value !== 'N/A');
 
   const handleAddQuote = () => {
@@ -65,7 +95,7 @@ export default function ProductDetail() {
             <h2 className="detail-name">{product.name}</h2>
             <div className="detail-price">{product.price_range}</div>
             <p className="detail-desc">{product.description}</p>
-
+ 
             <div className="specs-box" style={{ display: (specs.length || product.specifications) ? 'block' : 'none' }}>
               <div className="specs-title">Specifications</div>
               <div className="specs-grid">
