@@ -352,9 +352,9 @@ export default function AdminDashboard() {
                   ) : data.samples.map(s => (
                     <div key={s.id} className="ad-card">
                       <div className="ad-card-top">
-                        <div className="ad-card-avatar">{(s.name||'?')[0].toUpperCase()}</div>
+                        <div className="ad-card-avatar">{(s.full_name||'?')[0].toUpperCase()}</div>
                         <div className="ad-card-info">
-                          <div className="ad-card-name">{s.name}</div>
+                          <div className="ad-card-name">{s.full_name || 'Anonymous User'}</div>
                           <div className="ad-card-meta">{s.email} · {new Date(s.created_at).toLocaleDateString('en-GB', {day:'numeric',month:'short',year:'numeric'})}</div>
                         </div>
                         <span className="ad-status-chip" style={STATUS_STYLE[s.status] || {}}>{s.status}</span>
@@ -363,7 +363,9 @@ export default function AdminDashboard() {
                       <div className="ad-items">
                         <div className="ad-items-head">Request Details</div>
                         <div className="ad-item-row"><span>Product</span><span>{s.product_name}</span></div>
-                        {s.address && <div className="ad-item-row"><span>Address</span><span>{s.address}</span></div>}
+                        {s.phone && <div className="ad-item-row"><span>Phone</span><span>{s.phone}</span></div>}
+                        {s.company && <div className="ad-item-row"><span>Company</span><span>{s.company}</span></div>}
+                        {s.shipping_address && <div className="ad-item-row"><span>Address</span><span>{s.shipping_address}</span></div>}
                         {s.message && <div className="ad-item-row"><span>Message</span><span>{s.message}</span></div>}
                       </div>
 
