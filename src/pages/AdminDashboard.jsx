@@ -308,15 +308,26 @@ export default function AdminDashboard() {
                       <div className="ad-card-top">
                         <div className="ad-card-avatar">{(q.customer_name||'?')[0].toUpperCase()}</div>
                         <div className="ad-card-info">
-                          <div className="ad-card-name">{q.customer_name}</div>
-                          <div className="ad-card-meta">{q.customer_email} · {new Date(q.created_at).toLocaleDateString('en-GB', {day:'numeric',month:'short',year:'numeric'})}</div>
+                          <div className="ad-card-name" style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                            <span>{q.customer_name}</span>
+                            <span style={{fontSize: '0.8rem', color: 'var(--steel)', fontWeight: '500'}}>
+                              {new Date(q.created_at).toLocaleTimeString('en-GB', {hour: '2-digit', minute: '2-digit'})} · {new Date(q.created_at).toLocaleDateString('en-GB', {day:'numeric',month:'short',year:'numeric'})}
+                            </span>
+                          </div>
+                          <div className="ad-card-meta">
+                            {q.phone && <span>{q.phone} · </span>}
+                            {q.customer_email}
+                          </div>
                         </div>
                         <span className="ad-status-chip" style={STATUS_STYLE[q.status] || {}}>{q.status}</span>
                       </div>
 
                       {Array.isArray(q.items) && q.items.length > 0 && (
                         <div className="ad-items">
-                          <div className="ad-items-head">Cart Items</div>
+                          <div className="ad-items-head">Quotation Details</div>
+                          {q.company && <div className="ad-item-row"><span>Company</span><span>{q.company}</span></div>}
+                          {q.notes && <div className="ad-item-row"><span>Notes</span><span>{q.notes}</span></div>}
+                          <div className="ad-items-head" style={{marginTop: '0.75rem'}}>Cart Items</div>
                           {q.items.map((item, i) => (
                             <div key={i} className="ad-item-row">
                               <span>{item.name || item.product_name || 'Item'}</span>
@@ -354,8 +365,16 @@ export default function AdminDashboard() {
                       <div className="ad-card-top">
                         <div className="ad-card-avatar">{(s.full_name||'?')[0].toUpperCase()}</div>
                         <div className="ad-card-info">
-                          <div className="ad-card-name">{s.full_name || 'Anonymous User'}</div>
-                          <div className="ad-card-meta">{s.email} · {new Date(s.created_at).toLocaleDateString('en-GB', {day:'numeric',month:'short',year:'numeric'})}</div>
+                          <div className="ad-card-name" style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                            <span>{s.full_name || 'Anonymous User'}</span>
+                            <span style={{fontSize: '0.8rem', color: 'var(--steel)', fontWeight: '500'}}>
+                              {new Date(s.created_at).toLocaleTimeString('en-GB', {hour: '2-digit', minute: '2-digit'})} · {new Date(s.created_at).toLocaleDateString('en-GB', {day:'numeric',month:'short',year:'numeric'})}
+                            </span>
+                          </div>
+                          <div className="ad-card-meta">
+                            {s.phone && <span>{s.phone} · </span>}
+                            {s.email}
+                          </div>
                         </div>
                         <span className="ad-status-chip" style={STATUS_STYLE[s.status] || {}}>{s.status}</span>
                       </div>
@@ -363,7 +382,6 @@ export default function AdminDashboard() {
                       <div className="ad-items">
                         <div className="ad-items-head">Request Details</div>
                         <div className="ad-item-row"><span>Product</span><span>{s.product_name}</span></div>
-                        {s.phone && <div className="ad-item-row"><span>Phone</span><span>{s.phone}</span></div>}
                         {s.company && <div className="ad-item-row"><span>Company</span><span>{s.company}</span></div>}
                         {s.shipping_address && <div className="ad-item-row"><span>Address</span><span>{s.shipping_address}</span></div>}
                         {s.message && <div className="ad-item-row"><span>Message</span><span>{s.message}</span></div>}
