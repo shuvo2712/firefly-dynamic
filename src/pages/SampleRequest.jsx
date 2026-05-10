@@ -48,7 +48,7 @@ export default function SampleRequest() {
       message: e.target['s-message'].value
     };
 
-    if (!formData.product_name || !formData.full_name || !formData.email) {
+    if (!formData.product_name || !formData.full_name || !formData.email || !formData.phone) {
       setToastMsg('Please fill in all required fields.');
       setTimeout(() => setToastMsg(''), 3000);
       return;
@@ -131,7 +131,7 @@ export default function SampleRequest() {
               </div>
               <div className="form-grid">
                 <div className="form-group">
-                  <label htmlFor="s-name">Full Name *</label>
+                  <label htmlFor="s-name">Name *</label>
                   <input id="s-name" name="s-name" className="form-input" placeholder="Your Name" required />
                 </div>
                 <div className="form-group">
@@ -139,12 +139,12 @@ export default function SampleRequest() {
                   <input id="s-email" name="s-email" className="form-input" type="email" placeholder="Your Email" required />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="s-phone">Phone</label>
-                  <input id="s-phone" name="s-phone" className="form-input" placeholder="0123456789" />
+                  <label htmlFor="s-phone">Phone *</label>
+                  <input id="s-phone" name="s-phone" className="form-input" placeholder="0123456789" required />
                 </div>
                 <div className="form-group">
                   <label htmlFor="s-company">Company</label>
-                  <input id="s-company" name="s-company" className="form-input" placeholder="Your Company" />
+                  <input id="s-company" name="s-company" className="form-input" placeholder="Your Company Name" />
                 </div>
                 <div className="form-group form-full">
                   <label htmlFor="s-address">Shipping Address</label>

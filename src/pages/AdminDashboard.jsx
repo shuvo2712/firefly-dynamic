@@ -326,6 +326,7 @@ export default function AdminDashboard() {
                         <div className="ad-items">
                           <div className="ad-items-head">Quotation Details</div>
                           {q.company && <div className="ad-item-row"><span>Company</span><span>{q.company}</span></div>}
+                          {q.shipping_address && <div className="ad-item-row"><span>Address</span><span>{q.shipping_address}</span></div>}
                           {q.notes && <div className="ad-item-row"><span>Notes</span><span>{q.notes}</span></div>}
                           <div className="ad-items-head" style={{marginTop: '0.75rem'}}>Cart Items</div>
                           {q.items.map((item, i) => (

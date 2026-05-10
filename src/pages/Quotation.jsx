@@ -22,11 +22,15 @@ export default function Quotation() {
     const formData = {
       customer_name: e.target['q-name'].value,
       customer_email: e.target['q-email'].value,
+      customer_phone: e.target['q-phone'].value,
+      customer_company: e.target['q-company'].value,
+      customer_address: e.target['q-address'].value,
+      customer_notes: e.target['q-notes'].value,
       items: quotation // This is the array of cart items from context
     };
 
-    if (!formData.customer_name || !formData.customer_email) {
-      setToastMsg('Please fill in name and email.');
+    if (!formData.customer_name || !formData.customer_email || !formData.customer_phone) {
+      setToastMsg('Please fill in name, email, and phone.');
       setTimeout(() => setToastMsg(''), 3000);
       return;
     }
@@ -134,19 +138,23 @@ export default function Quotation() {
               <div className="form-grid">
                 <div className="form-group">
                   <label htmlFor="q-name">Name *</label>
-                  <input id="q-name" name="q-name" className="form-input" placeholder="Your full name" required />
+                  <input id="q-name" name="q-name" className="form-input" placeholder="Your Name" required />
                 </div>
                 <div className="form-group">
                   <label htmlFor="q-email">Email *</label>
-                  <input id="q-email" name="q-email" className="form-input" type="email" placeholder="Your email" required />
+                  <input id="q-email" name="q-email" className="form-input" type="email" placeholder="Your Email" required />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="q-phone">Phone</label>
-                  <input id="q-phone" name="q-phone" className="form-input" placeholder="0123456789" />
+                  <label htmlFor="q-phone">Phone *</label>
+                  <input id="q-phone" name="q-phone" className="form-input" placeholder="0123456789" required />
                 </div>
                 <div className="form-group">
                   <label htmlFor="q-company">Company</label>
-                  <input id="q-company" name="q-company" className="form-input" placeholder="Your company name" />
+                  <input id="q-company" name="q-company" className="form-input" placeholder="Your Company Name" />
+                </div>
+                <div className="form-group form-full">
+                  <label htmlFor="q-address">Shipping Address</label>
+                  <textarea id="q-address" name="q-address" className="form-textarea" placeholder="Full delivery address for freight calculation"></textarea>
                 </div>
                 <div className="form-group form-full">
                   <label htmlFor="q-notes">Notes</label>
